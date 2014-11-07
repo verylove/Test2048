@@ -20,6 +20,8 @@ public:
 
 	static Scene* createScene();
 
+	void menuCloseCallback(Ref* pSender);
+
 	CREATE_FUNC(MainScene);
 
 };
