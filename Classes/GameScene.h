@@ -31,6 +31,16 @@ public :
 	bool m_startMove;//判断是否开始触摸，并且在一个滑动结束前，不允许再次获取触摸
 	void moveAllTiled( MOVE_DIR dir );//就是根据滑动的方向，对相应方向的数字块 进行合并或者移动
 
+	void judgeMove();
+
+	// 播放哪个音乐
+	bool m_sound_clear;
+
+	bool isMoveUp = false;
+	bool isMoveDown = false;
+	bool isMoveRight = false;
+	bool isMoveLeft = false;
+
 	void moveUp();
 	void moveDown();
 	void moveLeft();

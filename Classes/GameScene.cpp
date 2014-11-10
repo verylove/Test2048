@@ -6,7 +6,10 @@
  */
 
 #include "GameScene.h"
+#include "GameOverScene.h"
+#include "SimpleAudioEngine.h"
 
+using namespace CocosDenshion;
 
 USING_NS_CC;
 
@@ -29,6 +32,10 @@ bool GameScene::init()
 	{
 		return false;
 	}
+
+	// 加载音效
+	SimpleAudioEngine::getInstance() -> preloadEffect("move.wav");
+	SimpleAudioEngine::getInstance() -> preloadEffect("move1.wav");
 
 	//初始化游戏网格
 	colorBack = LayerColor::create(
@@ -173,23 +180,156 @@ void GameScene::newNumberTiled()
 
 void GameScene::moveAllTiled( MOVE_DIR dir )
 {
-	// 根据具体方向进行，相应方向的移动
-	switch ( dir )
+	// 判断 并 移动所有块  消除
+	judgeMove();
+
+	// 如果上下左右都不能移动，则游戏结束~
+	if( !isMoveLeft  && !isMoveRight && !isMoveUp && !isMoveDown )
 	{
-	case MOVE_DIR::UP:	moveUp();
-		break;
-	case MOVE_DIR::DOWN:	moveDown();
-		break;
-	case MOVE_DIR::LEFT:	moveLeft();
-		break;
-	case MOVE_DIR::RIGHT:	moveRight();
-		break;
-	default:
-		break;
+		auto scene = Scene::create();
+		auto layer = GameOverScene::create();
+		scene -> addChild( layer );
+
+		Director::sharedDirector() -> replaceScene(CCTransitionFadeDown::create(1.5f,scene));
+
 	}
 
-	// 移动完成，随机产生新块
+	m_sound_clear = false;
+
+	// 根据方向移动，但是要先判断是否可以向那个方向移动
+	switch ( dir )
+	{
+	case MOVE_DIR::UP:
+		if( !isMoveUp )	return;
+		moveUp();
+		break;
+	case MOVE_DIR::DOWN:
+		if( !isMoveDown )	return;
+		moveDown();
+		break;
+	case MOVE_DIR::LEFT:
+		if( !isMoveLeft )	return;
+		moveLeft();
+		break;
+	case MOVE_DIR::RIGHT:
+		if( !isMoveRight )	return;
+		moveRight();
+		break;
+	default:	break;
+	}
+
+	// 播放音乐
+	if( m_sound_clear )
+	{
+		SimpleAudioEngine::getInstance() -> playEffect("move.wav");
+	}
+	else
+	{
+		SimpleAudioEngine::getInstance() -> playEffect("move1.wav");
+	}
+
+	// 产生新块
 	newNumberTiled();
+}
+
+/*
+ *  游戏方向能否移动 和 游戏结束的判定
+	这俩为什么放一块呢？
+	我的方法是在.h建立4个bool变量：能否向上移动、能否向下移动、。。。
+	这样，如果四个方向都不能移动，即为游戏结束了
+ */
+void GameScene::judgeMove()
+{
+	int r , c;
+	isMoveUp = false;
+	isMoveDown = false;
+	isMoveRight = false;
+	isMoveLeft = false;
+
+	// 向上能否移动
+	for( r = 0 ; r < GAME_ROWS - 1 ; ++r )
+	{
+		for( c = 0 ; c < GAME_COLS ; ++c )
+		{
+			if( map[r+1][c] == 0 )
+			{
+				if( map[r][c] != 0 )	{	isMoveUp = true;	break;	}
+			}
+			else
+			{
+				if( map[r][c] != 0 )
+				{
+					if(	m_allTiled.at( map[r][c] - 1 ) -> m_number == m_allTiled.at( map[r+1][c] - 1 ) -> m_number )
+					{	isMoveUp = true;	break;	}
+				}
+			}
+		}
+		if( isMoveUp == true )	break;
+	}
+
+	// 向下是否能移动
+	for( r = GAME_ROWS-1 ; r > 0 ; --r )
+	{
+		for( c = 0 ; c < GAME_COLS ; ++c )
+		{
+			if( map[r-1][c] == 0 )
+			{
+				if( map[r][c] != 0 )
+				{	isMoveDown = true;	break;	}
+			}
+			else
+			{
+				if( map[r][c] != 0 )
+				{
+					if(	m_allTiled.at( map[r][c] - 1 ) -> m_number == m_allTiled.at( map[r-1][c] - 1 ) -> m_number )
+					{	isMoveDown = true;	break;	}
+				}
+			}
+		}
+		if( isMoveDown == true  )	break;
+	}
+
+	// 向左是否能移动
+	for( c = 0 ; c < GAME_COLS-1 ; ++c )
+	{
+		for( r = 0 ; r < GAME_ROWS ; ++r )
+		{
+			if( map[r][c+1] == 0 )
+			{
+				if( map[r][c] != 0 )	{	isMoveRight = true;	break;	}
+			}
+			else
+			{
+				if( map[r][c] != 0 )
+				{
+					if(	m_allTiled.at( map[r][c] - 1 ) -> m_number == m_allTiled.at( map[r][c+1] - 1 ) -> m_number )
+					{	isMoveRight = true;	break;	}
+				}
+			}
+		}
+		if( isMoveRight == true )	break;
+	}
+
+	// 向右是否能移动
+	for( c = GAME_COLS-1 ; c > 0  ; --c )
+	{
+		for( r = 0 ; r < GAME_ROWS ; ++r )
+		{
+			if( map[r][c-1] == 0 )
+			{
+				if( map[r][c] != 0 )	{	isMoveLeft = true;	break;	}
+			}
+			else
+			{
+				if( map[r][c] != 0 )
+				{
+					if(	m_allTiled.at( map[r][c] - 1 ) -> m_number == m_allTiled.at( map[r][c-1] - 1 ) -> m_number )
+					{	isMoveLeft = true;	break;	}
+				}
+			}
+		}
+		if( isMoveLeft == true )	break;
+	}
 }
 
 /*
@@ -240,6 +380,8 @@ void GameScene::moveUp( )
 						// 两个格子数字相同
 						if( numNow == numObj )
 						{
+							m_sound_clear = true;
+
 							// 上面那一行数字X2
 							m_allTiled.at( map[row1+1][col] - 1 ) -> doubleNumber();
 							// 去除掉当前数字块
@@ -292,6 +434,8 @@ void GameScene::moveDown( )
 						int numNow = m_allTiled.at( map[row1][col] - 1 ) -> m_number;
 						if( numNow == numObj )
 						{
+							m_sound_clear = true;
+
 							m_allTiled.at( map[row1-1][col] - 1 ) -> doubleNumber();
 							m_allTiled.at( map[row1][col] - 1 ) -> removeFromParent();
 
@@ -343,6 +487,8 @@ void GameScene::moveLeft( )
 						int numNow = m_allTiled.at( map[row][col1] - 1 ) -> m_number;
 						if( numNow == numObj )
 						{
+							m_sound_clear = true;
+
 							m_allTiled.at( map[row][col1-1] - 1 ) -> doubleNumber();
 							m_allTiled.at( map[row][col1] - 1 ) -> removeFromParent();
 							int index = map[row][col1];
@@ -392,6 +538,8 @@ void GameScene::moveRight( )
 						int numNow = m_allTiled.at( map[row][col1] - 1 ) -> m_number;
 						if( numNow == numObj )
 						{
+							m_sound_clear = true;
+
 							m_allTiled.at( map[row][col1+1] - 1 ) -> doubleNumber();
 							m_allTiled.at( map[row][col1] - 1 ) -> removeFromParent();
 							int index = map[row][col1];
