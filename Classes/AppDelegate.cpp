@@ -1,5 +1,4 @@
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
 #include "MainScene.h"
 
 USING_NS_CC;
@@ -29,11 +28,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto glview = director->getOpenGLView();
     if(!glview) {
         glview = GLViewImpl::create("My Game");
-        glview->setFrameSize(320,480);
+        glview->setFrameSize(720,1280);
         director->setOpenGLView(glview);
     }
 
-    glview->setDesignResolutionSize(320,480,kResolutionNoBorder);
+    glview->setDesignResolutionSize(720,1280,kResolutionNoBorder);
     // turn on display FPS
     director->setDisplayStats(true);
 

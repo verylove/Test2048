@@ -28,6 +28,8 @@ public :
 	LayerColor* colorBack;//LayerColor指针
 
 	int m_x,m_y;//记录屏幕开始触摸时的坐标
+	int score;
+
 	bool m_startMove;//判断是否开始触摸，并且在一个滑动结束前，不允许再次获取触摸
 	void moveAllTiled( MOVE_DIR dir );//就是根据滑动的方向，对相应方向的数字块 进行合并或者移动
 

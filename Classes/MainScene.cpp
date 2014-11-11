@@ -40,8 +40,8 @@ bool MainScene::init()
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
 	auto closeItem = MenuItemImage::create(
-										   "CloseNormal.png",
-										   "CloseSelected.png",
+										   "exit.png",
+										   "exit_btn.png",
 										   CC_CALLBACK_1(MainScene::menuCloseCallback, this));
 
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,

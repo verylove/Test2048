@@ -30,6 +30,7 @@ bool GameOverScene::init()
 		return false;
 	}
 
+
 	//重新开始游戏
 	auto restartItem = MenuItemFont::create("Restart",CC_CALLBACK_1(GameOverScene::menuRestartCallback,this));
 	restartItem -> setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT/2));

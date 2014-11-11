@@ -33,6 +33,21 @@ bool GameScene::init()
 		return false;
 	}
 
+	Sprite* bg = Sprite::create("bg.png");
+	bg -> ignoreAnchorPointForPosition(false);
+	bg -> setAnchorPoint(Point(0,0));
+	bg -> setPosition(Point::ZERO);
+	this->addChild(bg);
+
+	TTFConfig config("HelloKitty.ttf",40);
+
+	// 分数
+	score = 0;
+	auto labelScore = Label::createWithTTF(config, "Score  :  0  ");
+	labelScore -> setPosition( Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 1.5*labelScore->getContentSize().height));
+	this->addChild(labelScore);
+	labelScore -> setTag(105);
+
 	// 加载音效
 	SimpleAudioEngine::getInstance() -> preloadEffect("move.wav");
 	SimpleAudioEngine::getInstance() -> preloadEffect("move1.wav");
@@ -47,9 +62,7 @@ bool GameScene::init()
 	//锚点在左下角 0，0，改变到中间
 	colorBack->ignoreAnchorPointForPosition(false);
 	colorBack->setAnchorPoint(Point(0.5,0.5));
-
 	colorBack->setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT/2));
-
 	this->addChild(colorBack);
 
 
@@ -195,6 +208,9 @@ void GameScene::moveAllTiled( MOVE_DIR dir )
 	}
 
 	m_sound_clear = false;
+	// 分数更新
+	Label *labelScore = (Label *)this -> getChildByTag(105);
+	labelScore -> setString( StringUtils::format(" Score : %d  ",score));
 
 	// 根据方向移动，但是要先判断是否可以向那个方向移动
 	switch ( dir )
@@ -381,6 +397,7 @@ void GameScene::moveUp( )
 						if( numNow == numObj )
 						{
 							m_sound_clear = true;
+							score += numObj * 2;
 
 							// 上面那一行数字X2
 							m_allTiled.at( map[row1+1][col] - 1 ) -> doubleNumber();
@@ -435,6 +452,7 @@ void GameScene::moveDown( )
 						if( numNow == numObj )
 						{
 							m_sound_clear = true;
+							score += numObj * 2;
 
 							m_allTiled.at( map[row1-1][col] - 1 ) -> doubleNumber();
 							m_allTiled.at( map[row1][col] - 1 ) -> removeFromParent();
@@ -488,6 +506,7 @@ void GameScene::moveLeft( )
 						if( numNow == numObj )
 						{
 							m_sound_clear = true;
+							score += numObj * 2;
 
 							m_allTiled.at( map[row][col1-1] - 1 ) -> doubleNumber();
 							m_allTiled.at( map[row][col1] - 1 ) -> removeFromParent();
@@ -539,6 +558,7 @@ void GameScene::moveRight( )
 						if( numNow == numObj )
 						{
 							m_sound_clear = true;
+							score += numObj * 2;
 
 							m_allTiled.at( map[row][col1+1] - 1 ) -> doubleNumber();
 							m_allTiled.at( map[row][col1] - 1 ) -> removeFromParent();
