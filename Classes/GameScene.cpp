@@ -39,12 +39,13 @@ bool GameScene::init()
 	bg -> setPosition(Point::ZERO);
 	this->addChild(bg);
 
-	TTFConfig config("HelloKitty.ttf",40);
+	TTFConfig config("HelloKitty.ttf",60);
 
 	// ·ÖÊý
 	score = 0;
 	auto labelScore = Label::createWithTTF(config, "Score  :  0  ");
-	labelScore -> setPosition( Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 1.5*labelScore->getContentSize().height));
+	labelScore -> setPosition( Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 3*labelScore->getContentSize().height));
+	labelScore ->setColor(Color3B::BLACK);
 	this->addChild(labelScore);
 	labelScore -> setTag(105);
 
@@ -201,6 +202,7 @@ void GameScene::moveAllTiled( MOVE_DIR dir )
 	{
 		auto scene = Scene::create();
 		auto layer = GameOverScene::create();
+		layer->setScore(score);
 		scene -> addChild( layer );
 
 		Director::sharedDirector() -> replaceScene(CCTransitionFadeDown::create(1.5f,scene));

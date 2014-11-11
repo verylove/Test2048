@@ -23,6 +23,9 @@ public:
 	void menuRestartCallback(Ref* pObject);
 	//退出的回调函数
 	void menuExitCallback(Ref* pObject);
+
+	void setScore(int score);
+
 };
 
 

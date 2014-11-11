@@ -21,6 +21,8 @@ public:
 	static Scene* createScene();
 
 	void menuCloseCallback(Ref* pSender);
+	void menuItemCallback(Ref* pSender);
+	void menuStartCallback(Ref* pSender);
 
 	CREATE_FUNC(MainScene);
 
