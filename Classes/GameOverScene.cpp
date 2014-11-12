@@ -25,9 +25,43 @@ Scene* GameOverScene::createScene()
 
 void GameOverScene::setScore(int score)
 {
-	Label* scoreLabel = (Label*)this->getChildByTag(100);
-	scoreLabel->setString(StringUtils::format("%d",score));
+	int topScore = UserDefault::sharedUserDefault()->getIntegerForKey("TopScore");
+	if(topScore<score){
+
+		UserDefault::sharedUserDefault()->setIntegerForKey("TopScore",score);
+		UserDefault::sharedUserDefault()->flush();
+		Label* scoreLabel = (Label*)this->getChildByTag(100);
+		scoreLabel->setString(StringUtils::format("%d",score));
+
+		TTFConfig config("HelloKitty.ttf",80);
+		Label* topscoreLabel = Label::createWithTTF(config,"历史最高分");
+		topscoreLabel->setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 460));
+		this->addChild(topscoreLabel);
+
+		this->update(100);
+		schedule(schedule_selector(GameOverScene::update), 3.0f);
+	}else{
+		Label* scoreLabel = (Label*)this->getChildByTag(100);
+		scoreLabel->setString(StringUtils::format("%d",score));
+	}
+
+
 }
+
+void GameOverScene::update(float dt)
+{
+	ParticleSystemQuad*    _emitter;
+    _emitter = ParticleExplosion::create();
+    _emitter->retain();
+    _emitter->setTexture( Director::getInstance()->getTextureCache()->addImage("stars.png") );
+    _emitter->setAutoRemoveOnFinish(true);
+    int x  = rand_0_1()*GAME_SCREEN_WIDTH;
+    int y  = rand_0_1()*GAME_SCREEN_HEIGHT;
+
+    _emitter->setPosition(Vec2(x,y));
+	this->addChild(_emitter);
+}
+
 
 bool GameOverScene::init()
 {
@@ -46,7 +80,7 @@ bool GameOverScene::init()
 	//成绩
 	TTFConfig config("HelloKitty.ttf",80);
 	Label* scoreLabel = Label::createWithTTF(config,StringUtils::format("%d",0));
-	scoreLabel->setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 420));
+	scoreLabel->setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 430));
 	scoreLabel->setTag(100);
 	this->addChild(scoreLabel);
 

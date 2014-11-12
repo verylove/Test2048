@@ -26,6 +26,8 @@ public:
 
 	void setScore(int score);
 
+	void update(float dt);
+
 };
 
 

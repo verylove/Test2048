@@ -15,6 +15,8 @@ class MainScene : public Layer
 {
 
 public:
+
+
 	//≥ı ºªØ≥°æ∞
 	virtual bool init();
 
@@ -23,6 +25,7 @@ public:
 	void menuCloseCallback(Ref* pSender);
 	void menuItemCallback(Ref* pSender);
 	void menuStartCallback(Ref* pSender);
+
 
 	CREATE_FUNC(MainScene);
 

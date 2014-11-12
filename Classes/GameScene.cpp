@@ -44,7 +44,7 @@ bool GameScene::init()
 	// 分数
 	score = 0;
 	auto labelScore = Label::createWithTTF(config, "Score  :  0  ");
-	labelScore -> setPosition( Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 3*labelScore->getContentSize().height));
+	labelScore -> setPosition( Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT - 2*labelScore->getContentSize().height));
 	labelScore ->setColor(Color3B::BLACK);
 	this->addChild(labelScore);
 	labelScore -> setTag(105);
@@ -63,7 +63,7 @@ bool GameScene::init()
 	//锚点在左下角 0，0，改变到中间
 	colorBack->ignoreAnchorPointForPosition(false);
 	colorBack->setAnchorPoint(Point(0.5,0.5));
-	colorBack->setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT/2));
+	colorBack->setPosition(Point(GAME_SCREEN_WIDTH/2,GAME_SCREEN_HEIGHT/2 + 100));
 	this->addChild(colorBack);
 
 

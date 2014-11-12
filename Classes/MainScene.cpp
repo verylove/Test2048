@@ -9,6 +9,7 @@
 #include "MainScene.h"
 #include "GameDefine.h"
 #include "GameScene.h"
+#include "AboutScene.h"
 
 USING_NS_CC;
 
@@ -73,17 +74,14 @@ bool MainScene::init()
 	menu->setPosition(Vec2::ZERO);
 	this->addChild(menu, 1);
 
-
-
-
-
 	return true;
 }
 
+
 void MainScene::menuItemCallback(Ref* pSender)
 {
-	auto gameScene = GameScene::createScene();
-	Director::getInstance()->replaceScene(CCTransitionProgressRadialCCW::create(1,gameScene));
+	auto aboutScene = AboutScene::createScene();
+	Director::getInstance()->replaceScene(CCTransitionProgressRadialCCW::create(1,aboutScene));
 }
 
 
