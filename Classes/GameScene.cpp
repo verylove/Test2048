@@ -158,7 +158,7 @@ void GameScene::newNumberTiled()
 	// 找到有几个空闲的位置
 	int freeCount = 16 - m_allTiled.size();
 
-	int num = rand() % freeCount;
+	int num = 1;//rand() % freeCount;
 	int row = 0,col = 0,count = 0;
 	bool find = false;
 
@@ -247,7 +247,7 @@ void GameScene::moveAllTiled( MOVE_DIR dir )
 	}
 
 	// 产生新块
-	newNumberTiled();
+	//newNumberTiled();
 }
 
 /*

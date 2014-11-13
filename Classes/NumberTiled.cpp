@@ -50,10 +50,27 @@ void NumberTiled::moveTo( int r , int c )
 {
 	this -> m_row = r;
 	this -> m_col = c;
-	this -> setPosition(
-		Point( m_col * GAME_TILED_WIDTH + GAME_TILED_BOARD_WIDTH * (m_col + 1),
-		m_row * GAME_TILED_HEIGHT + GAME_TILED_BOARD_WIDTH * (m_row+1)
-		));
+
+	int x = m_col * GAME_TILED_WIDTH  + GAME_TILED_BOARD_WIDTH * (m_col + 1);
+	int y = m_row * GAME_TILED_HEIGHT + GAME_TILED_BOARD_WIDTH * (m_row + 1);
+
+
+	Vec2 curPos = this->getPosition();
+	Vec2 tarPos = Vec2(x,y);
+	Vec2 subPos = ccpSub(tarPos,curPos);
+
+	this->runAction(MoveBy::create(3.0f,subPos));
+	//this -> setPosition(Point(x,y));
+
+	/*
+	Vec2 x1 = convertToNodeSpace(Vec2(x,y));//把世界坐标转化为对象窗口内坐标
+	Vec2 x2 = convertToWorldSpace(Vec2(x,y));//把对角窗口内坐标转化为世界坐标
+	Vec2 x3 = convertToNodeSpaceAR(Vec2(x,y));//把世界坐标转化为基于锚点的窗口坐标
+	Vec2 x4 = convertToWorldSpaceAR(Vec2(x,y));//把基于锚占转化为世界坐标
+	CCLog("X1=%f Y1=%f X2=%f Y2=%f X3=%f Y3=%f X4=%f Y4=%f",x1.x,x1.y,x2.x,x2.y,x3.x,x3.y,x4.x,x4.y);
+	*/
+	CCLog("m_col=%d m_row=%d x=%d,y=%d  X:%f,Y:%f",m_col,m_row,x,y,subPos.x,subPos.y);
+
 }
 
 void NumberTiled::doubleNumber( )
